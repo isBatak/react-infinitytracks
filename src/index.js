@@ -1,4 +1,4 @@
-import Waveform from 'components/Waveform';
+import Waveform from '/components/Waveform';
 
 export {
   Waveform
