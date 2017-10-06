@@ -12,7 +12,9 @@
     "test": "NODE_ENV=test mocha",
     "test:watch": "NODE_ENV=test mocha --watch",
     "test:cov": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha",
-    "prepublish": "npm run lint && npm run test && npm run clean && npm run build && npm run build:umd"
+    "prepublish": "npm run lint && npm run test && npm run clean && npm run build && npm run build:umd",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -52,6 +54,9 @@
     "html-webpack-plugin": "2.22.0",
     "rimraf": "^2.6.2",
     "webpack": "^2.2.0",
-    "webpack-dev-server": "2.3.0"
+    "webpack-dev-server": "2.3.0",
+    "@storybook/react": "^3.2.12",
+    "@storybook/addon-actions": "^3.2.12",
+    "@storybook/addon-links": "^3.2.12"
   }
 }
