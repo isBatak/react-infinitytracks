@@ -12,5 +12,10 @@
   },
   "plugins": [
     "react"
-  ]
+  ],
+  "settings": {
+    "import/resolver": {
+      "babel-module": {}
+    }
+  }
 }

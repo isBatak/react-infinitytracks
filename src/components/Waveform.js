@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class Hello extends Component {
+class Waveform extends Component {
 
   static defaultProps = {
     buffer: null,
@@ -67,4 +67,4 @@ class Hello extends Component {
   }
 }
 
-export default Hello;
+export default Waveform;

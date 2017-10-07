@@ -19,7 +19,7 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      'react-infinitytrack': path.join(__dirname, '..', '..', 'src')
+      'react-infinitytracks': path.join(__dirname, '..', '..', 'src')
     },
     extensions: ['', '.ts', '.tsx', '.js', '.jsx']
   },

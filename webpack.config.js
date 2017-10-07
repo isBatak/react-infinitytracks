@@ -75,11 +75,8 @@ module.exports = {
     }]
   },
   output: {
-    library: 'react-infinitytrack',
+    library: 'react-infinitytracks',
     libraryTarget: 'umd'
   },
-  plugins: plugins,
-  resolve: {
-    extensions: ['', '.ts', '.tsx', '.js', '.jsx']
-  }
+  plugins: plugins
 };
