@@ -28,7 +28,7 @@ class WaveformComponent extends Component {
   render() {
     return (
       this.state.buffer !== null
-        ? <Waveform buffer={ this.state.buffer } width={ 720 } color="cadetblue" />
+        ? <Waveform buffer={this.state.buffer} width={720} color="cadetblue" />
         : null
     );
   }
