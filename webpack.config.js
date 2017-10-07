@@ -75,7 +75,7 @@ module.exports = {
     }]
   },
   output: {
-    library: 'react-multitrack',
+    library: 'react-infinitytrack',
     libraryTarget: 'umd'
   },
   plugins: plugins,

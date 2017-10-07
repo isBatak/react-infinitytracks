@@ -1,5 +1,5 @@
 {
-  "name": "react-multitrack",
+  "name": "react-infinitytrack",
   "version": "1.0.0",
   "description": "React library for managing multiple audio tracks",
   "main": "lib/index.js",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/isBatak/react-multitracks.git"
+    "url": "https://github.com/isBatak/react-infinitytracks.git"
   },
   "keywords": [
     "react",
@@ -28,9 +28,9 @@
   "author": "Ivica Batinic",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/isBatak/react-multitracks/issues"
+    "url": "https://github.com/isBatak/react-infinitytracks/issues"
   },
-  "homepage": "https://github.com/isBatak/react-multitracks",
+  "homepage": "https://github.com/isBatak/react-infinitytracks",
   "dependencies": {
     "prop-types": "15.6.0",
     "react": "16.0.0",
