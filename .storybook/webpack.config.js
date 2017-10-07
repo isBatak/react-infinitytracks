@@ -12,13 +12,7 @@ const genDefaultConfig = require('@storybook/react/dist/server/config/defaults/w
 module.exports = (baseConfig, env) => {
   const config = genDefaultConfig(baseConfig, env);
 
-  // config.resolve.extensions.push('.ts', '.tsx');
-  // config.resolve.alias = Object.assign(
-  //   config.resolve.alias,
-  //   {
-  //     'react-infinitytracks': path.join(__dirname, '..', 'src')
-  //   }
-  // );
+  config.entry.preview.unshift('babel-polyfill');
 
   return config;
 };
