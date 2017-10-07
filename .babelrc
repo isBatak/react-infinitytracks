@@ -1,6 +1,7 @@
 {
   "presets": ["env", "react", "stage-0"],
   "plugins": [
+    "transform-async-to-generator",
     "transform-decorators-legacy",
     "transform-class-properties",
     [

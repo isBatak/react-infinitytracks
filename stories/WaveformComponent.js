@@ -9,27 +9,24 @@ class WaveformComponent extends Component {
     };
   }
 
-  componentDidMount() {
-    const request = new XMLHttpRequest();
-    request.open('GET', 'https://waveform.000webhostapp.com/DS_BassA140D-01.wav', true);
-    request.responseType = 'arraybuffer';
+  async componentDidMount() {
+    const context = new (window.AudioContext || window.webkitAudioContext)();
+    const res = await fetch('https://waveform.000webhostapp.com/DS_BassA140D-01.wav');
+    const arrayBuffer = await res.arrayBuffer();
+    const buffer = await context.decodeAudioData(arrayBuffer);
+    await this.setStateAsync({ buffer });
+  }
 
-    request.addEventListener('load', () => {
-      const context = new (window.AudioContext || window.webkitAudioContext)();
-
-      context.decodeAudioData(request.response, (buffer) => {
-        this.setState({ buffer });
-      });
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve);
     });
-
-    request.send();
   }
 
   render() {
     return (
-      this.state.buffer !== null
-        ? <Waveform buffer={this.state.buffer} width={720} color="cadetblue" />
-        : null
+      this.state.buffer
+        && <Waveform buffer={this.state.buffer} width={720} color="cadetblue" />
     );
   }
 }

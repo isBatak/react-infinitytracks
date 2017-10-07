@@ -1,5 +1,7 @@
 import Waveform from './components/Waveform';
 
 export {
-  Waveform
-}
+  Waveform,
+};
+
+export default {};
