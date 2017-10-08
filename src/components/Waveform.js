@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class Hello extends Component {
-
+class Waveform extends Component {
   static defaultProps = {
-    buffer: null,
     width: 500,
     height: 100,
     zoom: 1,
@@ -28,22 +26,24 @@ class Hello extends Component {
     const channelData = this.props.buffer.getChannelData(0);
     const step = Math.ceil(channelData.length / width);
 
-    const ctx = this.canvas.getContext('2d');
-    ctx.fillStyle = this.props.color;
-    this.draw(width, step, middle, channelData, ctx);
+    if (this.canvas) {
+      this.context2d = this.canvas.getContext('2d');
+      this.context2d.fillStyle = this.props.color;
+      this.draw(width, step, middle, channelData);
+    }
 
     if (this.props.onDone) {
       this.props.onDone();
     }
   }
 
-  draw(width, step, middle, data, ctx) {
-    for (var i = 0; i < width; i++) {
-      var min = 1.0;
-      var max = -1.0;
+  draw(width, step, middle, data) {
+    for (let i = 0; i < width; i++) {
+      let min = 1.0;
+      let max = -1.0;
 
-      for (var j = 0; j < step; j++) {
-        var datum = data[(i * step) + j];
+      for (let j = 0; j < step; j++) {
+        const datum = data[(i * step) + j];
 
         if (datum < min) {
           min = datum;
@@ -51,7 +51,7 @@ class Hello extends Component {
           max = datum;
         }
 
-        ctx.fillRect(i, (1 + min) * middle, 1, Math.max(1, (max - min) * middle));
+        this.context2d.fillRect(i, (1 + min) * middle, 1, Math.max(1, (max - min) * middle));
       }
     }
   }
@@ -59,12 +59,12 @@ class Hello extends Component {
   render() {
     return (
       <canvas
-        ref={(element) => { this.canvas = element }}
+        ref={(element) => { this.canvas = element; }}
         width={this.props.width * this.props.zoom}
-        height={this.props.height}>
-      </canvas>
+        height={this.props.height}
+      />
     );
   }
 }
 
-export default Hello;
+export default Waveform;

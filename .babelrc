@@ -1,0 +1,15 @@
+{
+  "presets": ["env", "react", "stage-0"],
+  "plugins": [
+    "transform-decorators-legacy",
+    "transform-class-properties",
+    [
+      "module-resolver", {
+        "extensions": ["", ".ts", ".tsx", ".js", ".jsx"],
+        "alias": {
+          "react-infinitytracks": "./src"
+        }
+      }
+    ]
+  ]
+}
