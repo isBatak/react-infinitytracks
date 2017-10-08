@@ -26,9 +26,11 @@ class Waveform extends Component {
     const channelData = this.props.buffer.getChannelData(0);
     const step = Math.ceil(channelData.length / width);
 
-    this.ctx = this.canvas.getContext('2d');
-    this.ctx.fillStyle = this.props.color;
-    this.draw(width, step, middle, channelData);
+    if (this.canvas) {
+      this.context2d = this.canvas.getContext('2d');
+      this.context2d.fillStyle = this.props.color;
+      this.draw(width, step, middle, channelData);
+    }
 
     if (this.props.onDone) {
       this.props.onDone();
@@ -49,7 +51,7 @@ class Waveform extends Component {
           max = datum;
         }
 
-        this.ctx.fillRect(i, (1 + min) * middle, 1, Math.max(1, (max - min) * middle));
+        this.context2d.fillRect(i, (1 + min) * middle, 1, Math.max(1, (max - min) * middle));
       }
     }
   }

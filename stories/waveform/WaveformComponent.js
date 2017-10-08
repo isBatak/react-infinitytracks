@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Waveform } from 'react-infinitytracks';
 
 class WaveformComponent extends Component {
+  static propTypes = {
+    audioContext: PropTypes.object.isRequired,
+  }
+
   constructor() {
     super();
     this.state = {
@@ -10,10 +15,9 @@ class WaveformComponent extends Component {
   }
 
   async componentDidMount() {
-    const context = new (window.AudioContext || window.webkitAudioContext)();
     const res = await fetch('https://waveform.000webhostapp.com/DS_BassA140D-01.wav');
     const arrayBuffer = await res.arrayBuffer();
-    const buffer = await context.decodeAudioData(arrayBuffer);
+    const buffer = await this.props.audioContext.decodeAudioData(arrayBuffer);
     await this.setStateAsync({ buffer });
   }
 
