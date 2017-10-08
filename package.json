@@ -4,10 +4,9 @@
   "description": "React library for managing multiple audio tracks",
   "main": "lib/index.js",
   "scripts": {
-    "start": "webpack-dev-server --content-base build/ --port 3000",
     "clean": "rimraf lib dist",
     "build": "babel src --out-dir lib",
-    "build:umd": "webpack src/index.js dist/library-boilerplate.js && NODE_ENV=production webpack src/index.js dist/library-boilerplate.min.js",
+    "build:umd": "webpack src/index.js dist/react-infinitytracks.js && NODE_ENV=production webpack src/index.js dist/react-infinitytracks.min.js",
     "lint": "eslint src test stories",
     "test": "jest",
     "prepublish": "npm run lint && npm run test && npm run clean && npm run build && npm run build:umd",
@@ -38,6 +37,7 @@
     "react-dom": "16.0.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.23.1",
     "babel-eslint": "^8.0.1",
     "babel-jest": "^21.2.0",
