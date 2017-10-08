@@ -1,14 +1,17 @@
 ![Logo of the project](./images/logo.png)
 
 # React InfinityTracks
-> TODO - Additional information or tag line
+> This library is still in development phase and currently not usable at all.
 
-TODO - A brief description of your project, what it is used for.git push --set-upstream origin feature/cool-logo
+TODO - A brief description of your project, what it is used for
 
 ## Installing / Getting started
 
-`npm install`
+`yarn add react-infinitytracks` once the lib was released on npm
 
-`npm start`
+# Storybook
+To see all the component in isolated environment.
 
-Go to `localhost:3000`
+`yarn storybook`
+
+Go to `http://localhost:6006`
