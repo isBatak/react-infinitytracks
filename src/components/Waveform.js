@@ -8,22 +8,24 @@ class Waveform extends Component {
     zoom: 1,
     color: 'black',
     onDone: null,
+    renderingMode: 'canvas',
   }
 
   static propTypes = {
-    buffer: PropTypes.object.isRequired,
+    datum: PropTypes.object.isRequired,
     width: PropTypes.number,
     height: PropTypes.number,
     zoom: PropTypes.number,
     color: PropTypes.string,
     onDone: PropTypes.func,
+    renderingMode: PropTypes.oneOf(['canvas', 'svg']),
   }
 
   componentDidMount() {
     const width = this.props.width * this.props.zoom;
     const middle = this.props.height / 2;
 
-    const channelData = this.props.buffer.getChannelData(0);
+    const channelData = this.props.datum.getChannelData(0);
     const step = Math.ceil(channelData.length / width);
 
     if (this.canvas) {
@@ -57,12 +59,26 @@ class Waveform extends Component {
   }
 
   render() {
+    const { renderingMode, color } = this.props;
     return (
-      <canvas
-        ref={(element) => { this.canvas = element; }}
-        width={this.props.width * this.props.zoom}
-        height={this.props.height}
-      />
+      renderingMode === 'canvas'
+        ? <canvas
+          ref={(element) => { this.canvas = element; }}
+          width={this.props.width * this.props.zoom}
+          height={this.props.height}
+        />
+        : <svg
+          width={this.props.width * this.props.zoom}
+          height={this.props.height}
+        >
+          <path
+            fill="none"
+            shapeRendering="crispEdges"
+            stroke={color}
+            style={{ opacity: 1 }}
+            d={this.path()}
+          />
+        </svg>
     );
   }
 }
