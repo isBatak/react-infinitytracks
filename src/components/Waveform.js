@@ -58,6 +58,66 @@ class Waveform extends Component {
     }
   }
 
+  path() {
+    const { datum } = this.props;
+    const sliceMethod = datum instanceof Float32Array ? 'subarray' : 'slice';
+    const nbrSamples = datum.length;
+    const duration = nbrSamples / this.params.sampleRate;
+    const width = renderingContext.timeToPixel(duration);
+    const samplesPerPixel = nbrSamples / width;
+
+    if (!samplesPerPixel || datum.length < samplesPerPixel) { return; }
+
+    let minX = Math.max(-renderingContext.offsetX, 0);
+    let trackDecay = renderingContext.trackOffsetX + renderingContext.startX;
+    if (trackDecay < 0) { minX = -trackDecay; }
+
+    let maxX = minX;
+    maxX += (renderingContext.width - minX < renderingContext.visibleWidth) ?
+      renderingContext.width : renderingContext.visibleWidth;
+
+    // get min/max per pixels, clamped to the visible area
+    const invert = renderingContext.timeToPixel.invert;
+    const sampleRate = this.params.sampleRate;
+    const minMax = [];
+
+    for (let px = minX; px < maxX; px++) {
+      const startTime = invert(px);
+      const startSample = startTime * sampleRate;
+      const extract = datum[sliceMethod](startSample, startSample + samplesPerPixel);
+
+      let min = Infinity;
+      let max = -Infinity;
+
+      for (let j = 0, l = extract.length; j < l; j++) {
+        let sample = extract[j];
+        if (sample < min) { min = sample; }
+        if (sample > max) { max = sample; }
+      }
+      // disallow Infinity
+      min = !isFinite(min) ? 0 : min;
+      max = !isFinite(max) ? 0 : max;
+      if (min === 0 && max === 0) { continue; }
+
+      minMax.push([px, min, max]);
+    }
+
+    if (!minMax.length) { return; }
+
+    const PIXEL = 0;
+    const MIN = 1;
+    const MAX = 2;
+
+    const instructions = minMax.map((datum, index) => {
+      const x  = datum[PIXEL];
+      let y1 = Math.round(renderingContext.valueToPixel(datum[MIN]));
+      let y2 = Math.round(renderingContext.valueToPixel(datum[MAX]));
+      return `${x},${y1}L${x},${y2}`;
+    });
+
+    return 'M' + instructions.join('L');
+  }
+
   render() {
     const { renderingMode, color } = this.props;
     return (
