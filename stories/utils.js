@@ -7,7 +7,7 @@ const utils = {
     const increase = (Math.PI * 2) / 100;
 
     for (let i = 0; i < 2024; i++) {
-      data[i] = (Math.sin(counter) / 2) + 0.5;
+      data[i] = (Math.sin(counter) / 1);
       counter += increase;
     }
 
