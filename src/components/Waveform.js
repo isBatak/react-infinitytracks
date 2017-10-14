@@ -7,45 +7,39 @@ class Waveform extends Component {
     height: 100,
     zoom: 1,
     color: 'black',
-    onDone: null,
     renderingMode: 'canvas',
   }
 
   static propTypes = {
-    datum: PropTypes.object.isRequired,
+    buffer: PropTypes.object.isRequired,
     width: PropTypes.number,
     height: PropTypes.number,
     zoom: PropTypes.number,
     color: PropTypes.string,
-    onDone: PropTypes.func,
     renderingMode: PropTypes.oneOf(['canvas', 'svg']),
   }
 
   componentDidMount() {
-    const width = this.props.width * this.props.zoom;
-    const middle = this.props.height / 2;
-
-    const channelData = this.props.datum.getChannelData(0);
-    const step = Math.ceil(channelData.length / width);
-
-    if (this.canvas) {
+    if (this.props.renderingMode === 'canvas') {
       this.context2d = this.canvas.getContext('2d');
       this.context2d.fillStyle = this.props.color;
-      this.draw(width, step, middle, channelData);
-    }
-
-    if (this.props.onDone) {
-      this.props.onDone();
+      this.drawCanvas();
     }
   }
 
-  draw(width, step, middle, data) {
+  drawCanvas() {
+    const width = this.props.width * this.props.zoom;
+    const middle = this.props.height / 2;
+
+    const channelData = this.props.buffer.getChannelData(0);
+    const step = Math.ceil(channelData.length / width);
+
     for (let i = 0; i < width; i++) {
       let min = 1.0;
       let max = -1.0;
 
       for (let j = 0; j < step; j++) {
-        const datum = data[(i * step) + j];
+        const datum = channelData[(i * step) + j];
 
         if (datum < min) {
           min = datum;
@@ -58,87 +52,59 @@ class Waveform extends Component {
     }
   }
 
-  path() {
-    const { datum } = this.props;
-    const sliceMethod = datum instanceof Float32Array ? 'subarray' : 'slice';
-    const nbrSamples = datum.length;
-    const duration = nbrSamples / this.params.sampleRate;
-    const width = renderingContext.timeToPixel(duration);
-    const samplesPerPixel = nbrSamples / width;
+  svgPath() {
+    const width = this.props.width * this.props.zoom;
+    const middle = this.props.height / 2;
 
-    if (!samplesPerPixel || datum.length < samplesPerPixel) { return; }
+    const channelData = this.props.buffer.getChannelData(0);
+    const step = Math.ceil(channelData.length / width);
 
-    let minX = Math.max(-renderingContext.offsetX, 0);
-    let trackDecay = renderingContext.trackOffsetX + renderingContext.startX;
-    if (trackDecay < 0) { minX = -trackDecay; }
+    const instructions = [];
 
-    let maxX = minX;
-    maxX += (renderingContext.width - minX < renderingContext.visibleWidth) ?
-      renderingContext.width : renderingContext.visibleWidth;
+    for (let i = 0; i < width; i++) {
+      const min = 1.0;
+      const max = -1.0;
 
-    // get min/max per pixels, clamped to the visible area
-    const invert = renderingContext.timeToPixel.invert;
-    const sampleRate = this.params.sampleRate;
-    const minMax = [];
+      for (let j = 0; j < step; j++) {
+        let datum = channelData[(i * step) + j];
 
-    for (let px = minX; px < maxX; px++) {
-      const startTime = invert(px);
-      const startSample = startTime * sampleRate;
-      const extract = datum[sliceMethod](startSample, startSample + samplesPerPixel);
+        if (datum > min) {
+          datum = min;
+        } else if (datum < max) {
+          datum = max;
+        }
 
-      let min = Infinity;
-      let max = -Infinity;
-
-      for (let j = 0, l = extract.length; j < l; j++) {
-        let sample = extract[j];
-        if (sample < min) { min = sample; }
-        if (sample > max) { max = sample; }
+        instructions.push(`${i},${(1 + datum) * middle}`);
       }
-      // disallow Infinity
-      min = !isFinite(min) ? 0 : min;
-      max = !isFinite(max) ? 0 : max;
-      if (min === 0 && max === 0) { continue; }
-
-      minMax.push([px, min, max]);
     }
 
-    if (!minMax.length) { return; }
-
-    const PIXEL = 0;
-    const MIN = 1;
-    const MAX = 2;
-
-    const instructions = minMax.map((datum, index) => {
-      const x  = datum[PIXEL];
-      let y1 = Math.round(renderingContext.valueToPixel(datum[MIN]));
-      let y2 = Math.round(renderingContext.valueToPixel(datum[MAX]));
-      return `${x},${y1}L${x},${y2}`;
-    });
-
-    return 'M' + instructions.join('L');
+    return `M${instructions.join('L')}`;
   }
 
   render() {
     const { renderingMode, color } = this.props;
     return (
       renderingMode === 'canvas'
-        ? <canvas
-          ref={(element) => { this.canvas = element; }}
-          width={this.props.width * this.props.zoom}
-          height={this.props.height}
-        />
-        : <svg
-          width={this.props.width * this.props.zoom}
-          height={this.props.height}
-        >
-          <path
-            fill="none"
-            shapeRendering="crispEdges"
-            stroke={color}
-            style={{ opacity: 1 }}
-            d={this.path()}
+        ?
+          <canvas
+            ref={(element) => { this.canvas = element; }}
+            width={this.props.width * this.props.zoom}
+            height={this.props.height}
           />
-        </svg>
+        :
+          <svg
+            width={this.props.width * this.props.zoom}
+            height={this.props.height}
+          >
+            <path
+              fill="none"
+              shapeRendering="crispEdges"
+              stroke={color}
+              strokeWidth={1}
+              style={{ opacity: 1 }}
+              d={this.svgPath()}
+            />
+          </svg>
     );
   }
 }
