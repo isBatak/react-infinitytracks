@@ -20,10 +20,12 @@ class Waveform extends Component {
   }
 
   componentDidMount() {
-    if (this.props.renderingMode === 'canvas') {
+    if (this.props.renderingMode === 'canvas' && this.canvas) {
       this.context2d = this.canvas.getContext('2d');
       this.context2d.fillStyle = this.props.color;
       this.drawCanvas();
+    } else {
+      console.warn('Your browser do not support canvas! Please use svg as a render method');
     }
   }
 
