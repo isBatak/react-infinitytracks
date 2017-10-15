@@ -7,7 +7,7 @@ class Waveform extends Component {
     height: 100,
     zoom: 1,
     color: 'black',
-    onDone: null,
+    renderingMode: 'canvas',
   }
 
   static propTypes = {
@@ -16,34 +16,32 @@ class Waveform extends Component {
     height: PropTypes.number,
     zoom: PropTypes.number,
     color: PropTypes.string,
-    onDone: PropTypes.func,
+    renderingMode: PropTypes.oneOf(['canvas', 'svg']),
   }
 
   componentDidMount() {
+    if (this.props.renderingMode === 'canvas' && this.canvas) {
+      this.context2d = this.canvas.getContext('2d');
+      this.context2d.fillStyle = this.props.color;
+      this.drawCanvas();
+    } else {
+      console.warn('Your browser do not support canvas! Please use svg as a render method');
+    }
+  }
+
+  drawCanvas() {
     const width = this.props.width * this.props.zoom;
     const middle = this.props.height / 2;
 
     const channelData = this.props.buffer.getChannelData(0);
     const step = Math.ceil(channelData.length / width);
 
-    if (this.canvas) {
-      this.context2d = this.canvas.getContext('2d');
-      this.context2d.fillStyle = this.props.color;
-      this.draw(width, step, middle, channelData);
-    }
-
-    if (this.props.onDone) {
-      this.props.onDone();
-    }
-  }
-
-  draw(width, step, middle, data) {
     for (let i = 0; i < width; i++) {
       let min = 1.0;
       let max = -1.0;
 
       for (let j = 0; j < step; j++) {
-        const datum = data[(i * step) + j];
+        const datum = channelData[(i * step) + j];
 
         if (datum < min) {
           min = datum;
@@ -56,13 +54,59 @@ class Waveform extends Component {
     }
   }
 
+  svgPath() {
+    const width = this.props.width * this.props.zoom;
+    const middle = this.props.height / 2;
+
+    const channelData = this.props.buffer.getChannelData(0);
+    const step = Math.ceil(channelData.length / width);
+
+    const instructions = [];
+
+    for (let i = 0; i < width; i++) {
+      const min = 1.0;
+      const max = -1.0;
+
+      for (let j = 0; j < step; j++) {
+        let datum = channelData[(i * step) + j];
+
+        if (datum > min) {
+          datum = min;
+        } else if (datum < max) {
+          datum = max;
+        }
+
+        instructions.push(`${i},${(1 + datum) * middle}`);
+      }
+    }
+
+    return `M${instructions.join('L')}`;
+  }
+
   render() {
+    const { renderingMode, color } = this.props;
     return (
-      <canvas
-        ref={(element) => { this.canvas = element; }}
-        width={this.props.width * this.props.zoom}
-        height={this.props.height}
-      />
+      renderingMode === 'canvas'
+        ?
+          <canvas
+            ref={(element) => { this.canvas = element; }}
+            width={this.props.width * this.props.zoom}
+            height={this.props.height}
+          />
+        :
+          <svg
+            width={this.props.width * this.props.zoom}
+            height={this.props.height}
+          >
+            <path
+              fill="none"
+              shapeRendering="crispEdges"
+              stroke={color}
+              strokeWidth={1}
+              style={{ opacity: 1 }}
+              d={this.svgPath()}
+            />
+          </svg>
     );
   }
 }

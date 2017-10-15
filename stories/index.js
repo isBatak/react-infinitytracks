@@ -4,11 +4,16 @@ import { storiesOf } from '@storybook/react';
 // import { action } from '@storybook/addon-actions';
 // import { linkTo } from '@storybook/addon-links';
 
+import { Waveform } from 'react-infinitytracks';
+
 import WaveformComponent from './waveform/WaveformComponent';
-import WaveformWithGeneratedBuffer from './waveform/WaveformWithGeneratedBuffer';
+
+import Utils from './utils';
 
 const context = new (window.AudioContext || window.webkitAudioContext)();
+const sineWaveBuffer = Utils.sineWave(context);
 
 storiesOf('Waveform', module)
-  .add('with .wav', () => <WaveformComponent audioContext={context} />)
-  .add('with generated buffer', () => <WaveformWithGeneratedBuffer audioContext={context} />);
+  .add('canvas and .wav', () => <WaveformComponent audioContext={context} />)
+  .add('canvas and sineWave', () => <Waveform buffer={sineWaveBuffer} width={720} color="cadetblue" />)
+  .add('svg and sineWave', () => <Waveform buffer={sineWaveBuffer} width={720} color="cadetblue" renderingMode="svg" />);
