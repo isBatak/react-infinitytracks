@@ -30,7 +30,7 @@ class WaveformComponent extends Component {
   render() {
     return (
       this.state.buffer
-        && <Waveform buffer={this.state.buffer} width={720} color="cadetblue" />
+        && <Waveform datum={this.state.buffer.getChannelData(0)} width={720} color="cadetblue" />
     );
   }
 }

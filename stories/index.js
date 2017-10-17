@@ -15,5 +15,5 @@ const sineWaveBuffer = Utils.sineWave(context);
 
 storiesOf('Waveform', module)
   .add('canvas and .wav', () => <WaveformComponent audioContext={context} />)
-  .add('canvas and sineWave', () => <Waveform buffer={sineWaveBuffer} width={720} color="cadetblue" />)
-  .add('svg and sineWave', () => <Waveform buffer={sineWaveBuffer} width={720} color="cadetblue" renderingMode="svg" />);
+  .add('canvas and sineWave', () => <Waveform datum={sineWaveBuffer.getChannelData(0)} width={720} color="cadetblue" />)
+  .add('svg and sineWave', () => <Waveform datum={sineWaveBuffer.getChannelData(0)} width={720} color="blue" renderingMode={Waveform.renderMod.CANVAS} />);

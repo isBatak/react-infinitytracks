@@ -15,7 +15,7 @@ const WaveformWithGeneratedBuffer = (props) => {
   }
 
   return (
-    <Waveform buffer={buffer} width={720} color="cadetblue" />
+    <Waveform datum={buffer.getChannelData(0)} width={720} color="cadetblue" />
   );
 };
 
