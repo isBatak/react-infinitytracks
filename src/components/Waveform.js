@@ -5,48 +5,48 @@ class Waveform extends Component {
   static defaultProps = {
     width: 500,
     height: 100,
-    zoom: 1,
     color: 'black',
     renderingMode: 'canvas',
   }
 
   static propTypes = {
-    buffer: PropTypes.object.isRequired,
+    datum: PropTypes.instanceOf(Float32Array).isRequired,
     width: PropTypes.number,
     height: PropTypes.number,
-    zoom: PropTypes.number,
     color: PropTypes.string,
     renderingMode: PropTypes.oneOf(['canvas', 'svg']),
   }
 
+  static renderMod = {
+    CANVAS: 'canvas',
+    SVG: 'svg',
+  }
+
   componentDidMount() {
-    if (this.props.renderingMode === 'canvas' && this.canvas) {
+    if (this.props.renderingMode === this.constructor.renderMod.CANVAS) {
       this.context2d = this.canvas.getContext('2d');
       this.context2d.fillStyle = this.props.color;
       this.drawCanvas();
-    } else {
-      console.warn('Your browser do not support canvas! Please use svg as a render method');
     }
   }
 
   drawCanvas() {
-    const width = this.props.width * this.props.zoom;
-    const middle = this.props.height / 2;
+    const { width, height, datum } = this.props;
+    const middle = height / 2;
 
-    const channelData = this.props.buffer.getChannelData(0);
-    const step = Math.ceil(channelData.length / width);
+    const step = Math.ceil(datum.length / width);
 
     for (let i = 0; i < width; i++) {
       let min = 1.0;
       let max = -1.0;
 
       for (let j = 0; j < step; j++) {
-        const datum = channelData[(i * step) + j];
+        const value = datum[(i * step) + j];
 
-        if (datum < min) {
-          min = datum;
-        } else if (datum > max) {
-          max = datum;
+        if (value < min) {
+          min = value;
+        } else if (value > max) {
+          max = value;
         }
 
         this.context2d.fillRect(i, (1 + min) * middle, 1, Math.max(1, (max - min) * middle));
@@ -55,11 +55,10 @@ class Waveform extends Component {
   }
 
   svgPath() {
-    const width = this.props.width * this.props.zoom;
-    const middle = this.props.height / 2;
+    const { width, height, datum } = this.props;
+    const middle = height / 2;
 
-    const channelData = this.props.buffer.getChannelData(0);
-    const step = Math.ceil(channelData.length / width);
+    const step = Math.ceil(datum.length / width);
 
     const instructions = [];
 
@@ -68,15 +67,15 @@ class Waveform extends Component {
       const max = -1.0;
 
       for (let j = 0; j < step; j++) {
-        let datum = channelData[(i * step) + j];
+        let value = datum[(i * step) + j];
 
-        if (datum > min) {
-          datum = min;
-        } else if (datum < max) {
-          datum = max;
+        if (value > min) {
+          value = min;
+        } else if (value < max) {
+          value = max;
         }
 
-        instructions.push(`${i},${(1 + datum) * middle}`);
+        instructions.push(`${i},${(1 + value) * middle}`);
       }
     }
 
@@ -85,17 +84,18 @@ class Waveform extends Component {
 
   render() {
     const { renderingMode, color } = this.props;
+
     return (
-      renderingMode === 'canvas'
+      renderingMode === this.constructor.renderMod.CANVAS
         ?
           <canvas
             ref={(element) => { this.canvas = element; }}
-            width={this.props.width * this.props.zoom}
+            width={this.props.width}
             height={this.props.height}
           />
         :
           <svg
-            width={this.props.width * this.props.zoom}
+            width={this.props.width}
             height={this.props.height}
           >
             <path

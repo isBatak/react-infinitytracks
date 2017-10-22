@@ -8,7 +8,7 @@ const context = new AudioContext();
 const sineWaveBuffer = Utils.sineWave(context);
 
 test('Show waveform', () => {
-  const component = renderer.create(<Waveform buffer={sineWaveBuffer} width={720} color="cadetblue" />);
+  const component = renderer.create(<Waveform datum={sineWaveBuffer.getChannelData(0)} width={720} color="cadetblue" />);
   const tree = component.toJSON();
   expect(tree).toMatchSnapshot();
 });
