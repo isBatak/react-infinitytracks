@@ -13,13 +13,6 @@ const utils = {
 
     return buffer;
   },
-
-  async loadWavBuffer(audioContext, url) {
-    const res = await fetch(url);
-    const arrayBuffer = await res.arrayBuffer();
-    const buffer = await audioContext.decodeAudioData(arrayBuffer);
-    return buffer;
-  },
 };
 
 export default utils;
