@@ -35,23 +35,46 @@ class Waveform extends Component {
   getPeaks = (width, height, buffer) => {
     const middle = height / 2;
 
-    const step = Math.floor(buffer.length / width) || 1;
+    const step = Math.floor(buffer.length / width);
 
     const peaks = [];
 
-    for (let i = 0; i < width; i++) {
-      const min = 1.0;
-      const max = -1.0;
+    if (step < 1) {
+      const newStep = width / (buffer.length - 1);
 
-      let value = buffer[(i * step)];
+      for (let i = 0; i < buffer.length; i++) {
+        const min = 1.0;
+        const max = -1.0;
 
-      if (value > min) {
-        value = min;
-      } else if (value < max) {
-        value = max;
+        let value = buffer[(i)];
+
+        if (value > min) {
+          value = min;
+        } else if (value < max) {
+          value = max;
+        }
+
+        const pos = (i === (buffer.length - 1)) ? width : (i * newStep);
+
+        peaks.push([pos, Math.floor((1 + value) * middle)]);
       }
+    } else {
+      for (let i = 0; i <= width; i++) {
+        const min = 1.0;
+        const max = -1.0;
 
-      peaks.push([i, Math.floor((1 + value) * middle)]);
+        const bufferIndex = (i === width) ? (buffer.length - 1) : (i * step);
+
+        let value = buffer[bufferIndex];
+
+        if (value > min) {
+          value = min;
+        } else if (value < max) {
+          value = max;
+        }
+
+        peaks.push([i, Math.floor((1 + value) * middle)]);
+      }
     }
 
     return peaks;
