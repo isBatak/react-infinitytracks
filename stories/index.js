@@ -27,7 +27,7 @@ storiesOf('Waveform', module)
   .add('canvas and .wav', () => (
     <AudioRenderProps
       render={
-        ({ loading, buffer }) => !loading && <Waveform datum={buffer.getChannelData(0)} width={720} color="cadetblue" />
+        ({ loading, buffer }) => !loading && [<Waveform datum={buffer.getChannelData(0)} width={720} color="cadetblue" />, <div>numberOfChannels: {buffer.numberOfChannels}</div>]
       }
     />
   ))
