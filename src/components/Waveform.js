@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+const renderMode = {
+  CANVAS: 'canvas',
+  SVG: 'svg',
+};
+
 class Waveform extends Component {
   static defaultProps = {
     width: 500,
     height: 100,
     color: 'black',
-    renderingMode: 'canvas',
+    renderingMode: renderMode.CANVAS,
   }
 
   static propTypes = {
@@ -14,16 +19,13 @@ class Waveform extends Component {
     width: PropTypes.number,
     height: PropTypes.number,
     color: PropTypes.string,
-    renderingMode: PropTypes.oneOf(['canvas', 'svg']),
+    renderingMode: PropTypes.oneOf([renderMode.CANVAS, renderMode.SVG]),
   }
 
-  static renderMode = {
-    CANVAS: 'canvas',
-    SVG: 'svg',
-  }
+  static renderMode = renderMode
 
   componentDidMount() {
-    if (this.props.renderingMode === this.constructor.renderMode.CANVAS) {
+    if (this.props.renderingMode === renderMode.CANVAS) {
       this.context2d = this.canvas.getContext('2d');
       this.context2d.strokeStyle = this.props.color;
       this.drawCanvas();
@@ -82,7 +84,7 @@ class Waveform extends Component {
     const { renderingMode, color } = this.props;
 
     return (
-      renderingMode === this.constructor.renderMod.CANVAS
+      renderingMode === renderMode.CANVAS
         ?
           <canvas
             ref={(element) => { this.canvas = element; }}
