@@ -35,8 +35,8 @@ storiesOf('Waveform', module)
   .add('svg and .wav', () => (
     <AudioRenderProps
       render={
-        ({ loading, buffer }) => !loading && <Waveform buffer={buffer.getChannelData(0)} width={720} color="cadetblue" renderingMode={Waveform.renderMod.SVG} />
+        ({ loading, buffer }) => !loading && <Waveform buffer={buffer.getChannelData(0)} width={720} color="cadetblue" renderingMode={Waveform.renderMode.SVG} />
       }
     />
   ))
-  .add('svg and sineWave', () => <Waveform buffer={sineWaveBuffer.getChannelData(0)} width={720} color="cadetblue" renderingMode={Waveform.renderMod.SVG} />);
+  .add('svg and sineWave', () => <Waveform buffer={sineWaveBuffer.getChannelData(0)} width={720} color="cadetblue" renderingMode={Waveform.renderMode.SVG} />);

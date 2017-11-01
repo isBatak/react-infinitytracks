@@ -17,13 +17,13 @@ class Waveform extends Component {
     renderingMode: PropTypes.oneOf(['canvas', 'svg']),
   }
 
-  static renderMod = {
+  static renderMode = {
     CANVAS: 'canvas',
     SVG: 'svg',
   }
 
   componentDidMount() {
-    if (this.props.renderingMode === this.constructor.renderMod.CANVAS) {
+    if (this.props.renderingMode === this.constructor.renderMode.CANVAS) {
       this.context2d = this.canvas.getContext('2d');
       this.context2d.strokeStyle = this.props.color;
       this.drawCanvas();
