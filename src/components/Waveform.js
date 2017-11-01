@@ -25,7 +25,7 @@ class Waveform extends Component {
   componentDidMount() {
     if (this.props.renderingMode === this.constructor.renderMod.CANVAS) {
       this.context2d = this.canvas.getContext('2d');
-      this.context2d.fillStyle = this.props.color;
+      this.context2d.strokeStyle = this.props.color;
       this.drawCanvas();
     }
   }
@@ -57,26 +57,18 @@ class Waveform extends Component {
 
   drawCanvas() {
     const { width, height, buffer } = this.props;
-    const middle = height / 2;
+    const peaks = this.getPeaks(width, height, buffer);
 
-    const step = Math.floor(buffer.length / width) || 1;
+    this.context2d.beginPath();
 
-    for (let i = 0; i < width; i++) {
-      let min = 1.0;
-      let max = -1.0;
+    const start = peaks.shift();
+    this.context2d.moveTo(start[0], start[1]);
 
-      for (let j = 0; j < step; j++) {
-        const value = buffer[(i * step) + j];
+    peaks.forEach((peak) => {
+      this.context2d.lineTo(peak[0], peak[1]);
+    });
 
-        if (value < min) {
-          min = value;
-        } else if (value > max) {
-          max = value;
-        }
-
-        this.context2d.fillRect(i, Math.floor((1 + min) * middle), 1, Math.max(1, (max - min) * middle));
-      }
-    }
+    this.context2d.stroke();
   }
 
   svgPath() {
