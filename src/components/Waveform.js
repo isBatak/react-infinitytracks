@@ -79,20 +79,25 @@ class Waveform extends Component {
   }
 
   render() {
-    const { renderingMode, color } = this.props;
+    const {
+      renderingMode,
+      color,
+      width,
+      height,
+    } = this.props;
 
     return (
       renderingMode === this.constructor.renderMod.CANVAS
         ?
           <canvas
             ref={(element) => { this.canvas = element; }}
-            width={this.props.width}
-            height={this.props.height}
+            width={width}
+            height={height}
           />
         :
           <svg
-            width={this.props.width}
-            height={this.props.height}
+            width={width}
+            height={height}
           >
             <path
               fill="none"
