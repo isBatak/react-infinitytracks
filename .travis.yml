@@ -1,3 +1,14 @@
 language: node_js
 node_js:
-  - "iojs"
+  - "8"
+branches:
+  only:
+    - master
+cache:
+  yarn: true
+script:
+  - bash ./scripts/deploy-to-gh-pages.sh
+env:
+  global:
+    - GITHUB_REPO: "isBatak/react-infinitytracks"
+    - secure: "RqTQ6agVDHVLuuavf4aIhD83ODDhhudklarSTSn3Gp2jPkUG4i4uuWJZ0mOatgCFdvCKl7AgaZjTuWkgGkwrXP9OvQ340IxISn7Ept8T6f3KIOoFsFu8kpD+BB1HNGsdgzyVcOcYfCQ28E/qyH9+bobpx1hQeWfyIsuRu03p7sBVgQFYCtBgHnz/L7NYvnyGTHpjq5pKswfvYE9SHFMEjVld5d1gAVuvM2AhHBlmM4FmowKKKzQJiGlGa9t8No1GF+sRkVl8tkfT0qUzheIdntkc05dy+CW9yFOjJ9EQ/Lf8wLvgtMt2dfGhvjM6vz0PSbcgM6CKfgVxB+KH2vXpiW8NTHsjPfyP6gx0fnXFMzNX/rZ2kdNWaTeFkjWyqk081NkEhy+ysZP67JyVkt0AU+E07u9ruraur4uZJVe6dPVgS4C6KF14fXcsVsArHbZRbOwO1du8ZGI8jfY6wL067THLzbI/ZOr2RammH4PBHVps7tXZoCbdOuMT3bvWlNVp4pwzfm320VbTBZx9niUtJYE/m90CkPrZRQGeumtRyuHG618oK8uSyevt7U0sg20px4G3ph2D3kvbsLWd74352d3M7NaczdfJRKh0wpPhEWtOL8eY6drooTopMb4oCaGWl1jBpnVA9/i3dG1hH+0LWqdulRqX6riECNGLIXdhOpQ="

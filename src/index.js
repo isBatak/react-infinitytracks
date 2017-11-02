@@ -1,9 +1,15 @@
-import Axis from './components/Axis';
+import withAudio from './hoc/withAudio';
+import AudioProvider from './components/AudioProvider';
+import AudioRenderProps from './components/AudioRenderProps';
 import Waveform from './components/Waveform';
+import Axis from './components/Axis';
 
 export {
-  Axis,
+  AudioProvider,
+  AudioRenderProps,
   Waveform,
+  withAudio,
+  Axis,
 };
 
 export default {};
