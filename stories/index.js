@@ -4,7 +4,7 @@ import { storiesOf, addDecorator } from '@storybook/react';
 // import { action } from '@storybook/addon-actions';
 // import { linkTo } from '@storybook/addon-links';
 
-import { Waveform, AudioProvider, AudioRenderProps } from 'react-infinitytracks';
+import { Waveform, AudioProvider, AudioRenderProps, Axis } from 'react-infinitytracks';
 
 import Utils from './utils';
 
@@ -27,7 +27,7 @@ storiesOf('Waveform', module)
   .add('canvas and .wav', () => (
     <AudioRenderProps
       render={
-        ({ loading, buffer }) => !loading && [<Waveform buffer={buffer.getChannelData(0)} width={720} color="cadetblue" />, <div>numberOfChannels: {buffer.numberOfChannels}</div>]
+        ({ loading, buffer }) => !loading && [<Waveform buffer={buffer.getChannelData(0)} width={720} color="cadetblue" key="wave" />, <div key="info">numberOfChannels: {buffer.numberOfChannels}</div>]
       }
     />
   ))
@@ -40,3 +40,13 @@ storiesOf('Waveform', module)
     />
   ))
   .add('svg and sineWave', () => <Waveform buffer={sineWaveBuffer.getChannelData(0)} width={720} color="cadetblue" renderingMode={Waveform.renderMod.SVG} />);
+
+
+storiesOf('Axis', module)
+  .add('axis', () => (
+    <Axis
+      duration={sineWaveBuffer.duration}
+      width={720}
+      height={30}
+    />
+  ));
