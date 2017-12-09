@@ -2,10 +2,10 @@ import React from 'react';
 import { Waveform } from 'react-infinitytracks';
 import renderer from 'react-test-renderer';
 import 'web-audio-test-api';
-import Utils from '../stories/utils';
+import { sineWave } from '../stories/utils';
 
 const context = new AudioContext();
-const sineWaveBuffer = Utils.sineWave(context);
+const sineWaveBuffer = sineWave(context);
 
 test('Show waveform', () => {
   const component = renderer.create(<Waveform datum={sineWaveBuffer.getChannelData(0)} width={720} color="cadetblue" />);

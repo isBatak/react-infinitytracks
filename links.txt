@@ -1,0 +1,10 @@
+https://www.slideshare.net/VincentRiemer/sequencing-audio-using-react-and-the-web-audio-api
+
+WAAClock
+https://github.com/sebpiq/WAAClock
+
+A Tale of Two Clocks
+https://www.html5rocks.com/en/tutorials/audio/scheduling/
+
+Teoria.js
+https://github.com/saebekassebil/teoria
