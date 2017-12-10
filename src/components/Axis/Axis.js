@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { toHHMMSS } from '../../utils/time';
+import { toHHMMSSFFF } from '../../utils/time';
 
 class Axis extends Component {
   static propTypes = {
@@ -23,12 +23,12 @@ class Axis extends Component {
 
   startTime() {
     const { start } = this.props;
-    return toHHMMSS(start);
+    return toHHMMSSFFF(start);
   }
 
   endTime() {
     const { end } = this.props;
-    return toHHMMSS(end);
+    return toHHMMSSFFF(end);
   }
 
   render() {
